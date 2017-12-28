@@ -1,5 +1,12 @@
 package com.hubspot.rosetta.annotations;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.nio.charset.StandardCharsets;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.BinaryNode;
@@ -10,12 +17,6 @@ import com.google.common.base.Optional;
 import com.hubspot.rosetta.Rosetta;
 import com.hubspot.rosetta.beans.InnerBean;
 import com.hubspot.rosetta.beans.StoredAsJsonBean;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class StoredAsJsonTest {
   private StoredAsJsonBean bean;
@@ -36,6 +37,15 @@ public class StoredAsJsonTest {
     bean.setAnnotatedField(inner);
 
     assertThat(Rosetta.getMapper().valueToTree(bean).get("annotatedField")).isEqualTo(expected);
+  }
+
+  @Test
+  public void testAnnotatedFieldPolymorphicDeserialization() throws JsonProcessingException {
+    ObjectNode node = Rosetta.getMapper().createObjectNode();
+    node.put("annotatedField", expected);
+
+    StoredAsJsonBean bean = Rosetta.getMapper().treeToValue(node, StoredAsJsonBean.class);
+    assertThat(bean.getAnnotatedField().getStringProperty()).isEqualTo("value");
   }
 
   @Test
