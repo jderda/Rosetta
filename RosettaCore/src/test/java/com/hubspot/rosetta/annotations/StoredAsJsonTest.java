@@ -40,15 +40,6 @@ public class StoredAsJsonTest {
   }
 
   @Test
-  public void testAnnotatedFieldPolymorphicDeserialization() throws JsonProcessingException {
-    ObjectNode node = Rosetta.getMapper().createObjectNode();
-    node.put("annotatedField", expected);
-
-    StoredAsJsonBean bean = Rosetta.getMapper().treeToValue(node, StoredAsJsonBean.class);
-    assertThat(bean.getAnnotatedField().getStringProperty()).isEqualTo("value");
-  }
-
-  @Test
   public void testAnnotatedFieldDeserialization() throws JsonProcessingException {
     ObjectNode node = Rosetta.getMapper().createObjectNode();
     node.put("annotatedField", expected);
