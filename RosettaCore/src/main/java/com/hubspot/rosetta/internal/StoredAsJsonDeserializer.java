@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
+import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -41,6 +42,11 @@ public class StoredAsJsonDeserializer<T> extends StdScalarDeserializer<T> {
     } else {
       throw ctxt.mappingException("Expected JSON String");
     }
+  }
+  
+  @Override
+  public T deserializeWithType(JsonParser jp, DeserializationContext ctxt, TypeDeserializer typeDeserializer) throws IOException {
+    return deserialize(jp, ctxt);
   }
 
   @Override
